@@ -11,6 +11,10 @@ ITransformer model = BuildAndTrainModel(mlContext, trainingDataView);
 
 EvaluateModel(mlContext, testDataView, model);
 
+UseModelFormSinglePrediction(mlContext, model);
+
+SaveModel(mlContext, trainingDataView.Schema, model);
+
 (IDataView training, IDataView test) LoadData(MLContext mlContext)
 {
     var trainingDataPath = Path.Combine(Environment.CurrentDirectory, "data", "recommendation-ratings-train.csv");
@@ -80,4 +84,45 @@ void EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer mod
 
     Console.WriteLine($"Root Mean Squared Error: {metrics.RootMeanSquaredError}");
     Console.WriteLine($"RSquared: {metrics.RSquared}");
+}
+
+void UseModelFormSinglePrediction(MLContext mlcontext, ITransformer model)
+{
+    Console.WriteLine("=============== Making a prediction ===============");
+
+    //The PredictionEngine is a convenience API, which allows you to perform a prediction on a single instance of data.
+    var predictionEngine = mlcontext.Model.CreatePredictionEngine<MovieRating, MovieRatingPrediction>(model);
+
+    var testInput = new MovieRating
+    {
+        userId = 6,
+        movieId = 10
+    };
+
+    //The Predict() function makes a prediction on a single column of data.
+    var movieRatingPrediction = predictionEngine.Predict(testInput);
+
+    //ou can then use the Score, or the predicted rating, to determine whether you want
+    //to recommend the movie with movieId 10 to user 6. The higher the Score,
+    //the higher the likelihood of a user liking a particular movie.
+    //In this case, let’s say that you recommend movies with a predicted rating of > 3.5.
+
+    if (Math.Round(movieRatingPrediction.Score, 1) > 3.5)
+    {
+        Console.WriteLine($"Movie {testInput.movieId} is recommended for user {testInput.userId}");
+    }
+    else
+    {
+        Console.WriteLine($"Movie {testInput.movieId} is NOT recommended for user {testInput.userId}");
+    }
+}
+
+void SaveModel(MLContext mlContext, DataViewSchema trainingDataViewSchema, ITransformer model)
+{
+    var modelPath = Path.Combine(Environment.CurrentDirectory, "data", "MovieRecommenderModel.zip");
+
+    Console.WriteLine("=============== Saving the model to a file ===============");
+
+    //This method saves your trained model to a .zip file (in the "Data" folder), which can then be used in other .NET applications to make predictions.
+    mlContext.Model.Save(model, trainingDataViewSchema, modelPath);
 }
