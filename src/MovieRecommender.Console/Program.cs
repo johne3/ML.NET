@@ -86,12 +86,12 @@ void EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer mod
     Console.WriteLine($"RSquared: {metrics.RSquared}");
 }
 
-void UseModelFormSinglePrediction(MLContext mlcontext, ITransformer model)
+void UseModelFormSinglePrediction(MLContext mlContext, ITransformer model)
 {
     Console.WriteLine("=============== Making a prediction ===============");
 
     //The PredictionEngine is a convenience API, which allows you to perform a prediction on a single instance of data.
-    var predictionEngine = mlcontext.Model.CreatePredictionEngine<MovieRating, MovieRatingPrediction>(model);
+    var predictionEngine = mlContext.Model.CreatePredictionEngine<MovieRating, MovieRatingPrediction>(model);
 
     var testInput = new MovieRating
     {
