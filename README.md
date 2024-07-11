@@ -3,4 +3,14 @@
 ### MovieRecommender.Console
 Build a movie recommender using matrix factorization with ML.NET
 
+#### This works well when we have ratings for a user
+
 https://learn.microsoft.com/en-us/dotnet/machine-learning/tutorials/movie-recommendation
+
+
+### ProductRecommendation.Console
+The style of recommendation in this sample is based upon the co-purchase scenario or products frequently bought together which means it will recommend customers a set of products based upon their purchase order history.
+
+This works well when we just have a history without ratings etc.
+
+https://github.com/dotnet/machinelearning-samples/tree/main/samples/csharp/getting-started/MatrixFactorization_ProductRecommendation
