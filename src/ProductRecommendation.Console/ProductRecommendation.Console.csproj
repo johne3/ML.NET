@@ -7,4 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+        <PackageReference Include="Microsoft.ML.Recommender" Version="0.21.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+    <None Update="data\Amazon0302.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
